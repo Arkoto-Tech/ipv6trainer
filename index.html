@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPv4 to IPv6 Trainer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        #problem {
+            font-size: 24px;
+            margin: 20px;
+        }
+        input, button {
+            font-size: 18px;
+            margin: 10px;
+            padding: 10px;
+        }
+    </style>
+
+<body>
+    <h1>IPv4 to IPv6 Trainer</h1>
+    <p>Convert the given IPv4 address to its IPv6-mapped equivalent.</p>
+    <p>Example: 192.168.1.1 → ::ffff:c0a8:0101</p>
+    
+    <div id="problem"></div>
+    <input type="text" id="answer" placeholder="Enter IPv6 address">
+    <button onclick="checkAnswer()">Submit</button>
+    <button onclick="generateProblem()">New Problem</button>
+    
+    <p id="result"></p>
+    
+    <script>
+        function getRandomByte() {
+            return Math.floor(Math.random() * 256);
+        }
+        
+        function generateIPv4() {
+            return `${getRandomByte()}.${getRandomByte()}.${getRandomByte()}.${getRandomByte()}`;
+        }
+        
+        function toIPv6(ipv4) {
+            const parts = ipv4.split('.').map(num => parseInt(num, 10).toString(16).padStart(2, '0'));
+            return `::ffff:${parts.slice(0,2).join('')}:${parts.slice(2,4).join('')}`;
+        }
+        
+        function generateProblem() {
+            const ipv4 = generateIPv4();
+            document.getElementById("problem").textContent = `Convert: ${ipv4}`;
+            document.getElementById("problem").dataset.answer = toIPv6(ipv4);
+            document.getElementById("answer").value = "";
+            document.getElementById("result").textContent = "";
+        }
+        
+        function checkAnswer() {
+            const userAnswer = document.getElementById("answer").value.trim().toLowerCase();
+            const correctAnswer = document.getElementById("problem").dataset.answer;
+            
+            if (userAnswer === correctAnswer) {
+                document.getElementById("result").textContent = "Correct!";
+                document.getElementById("result").style.color = "green";
+            } else {
+                document.getElementById("result").textContent = `Incorrect. The correct answer is ${correctAnswer}`;
+                document.getElementById("result").style.color = "red";
+            }
+        }
+        
+        generateProblem();
+    </script>
+</body>
+</html>

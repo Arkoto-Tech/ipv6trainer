@@ -20,7 +20,7 @@
             padding: 10px;
         }
     </style>
-
+</head>
 <body>
     <h1>IPv4 to IPv6 Trainer</h1>
     <p>Convert the given IPv4 address to its IPv6-mapped equivalent.</p>
@@ -30,8 +30,10 @@
     <input type="text" id="answer" placeholder="Enter IPv6 address">
     <button onclick="checkAnswer()">Submit</button>
     <button onclick="generateProblem()">New Problem</button>
+    <button onclick="showAnswer()">Show Answer</button>
     
     <p id="result"></p>
+    <p id="correctAnswer" style="display: none;"></p>
     
     <script>
         function getRandomByte() {
@@ -53,19 +55,28 @@
             document.getElementById("problem").dataset.answer = toIPv6(ipv4);
             document.getElementById("answer").value = "";
             document.getElementById("result").textContent = "";
+            document.getElementById("correctAnswer").textContent = `Correct answer: ${toIPv6(ipv4)}`;
+            document.getElementById("correctAnswer").style.display = "none";
         }
         
         function checkAnswer() {
             const userAnswer = document.getElementById("answer").value.trim().toLowerCase();
             const correctAnswer = document.getElementById("problem").dataset.answer;
             
-            if (userAnswer === correctAnswer) {
+            if (userAnswer === "") {
+                document.getElementById("result").textContent = "Invalid input. Please enter an answer.";
+                document.getElementById("result").style.color = "orange";
+            } else if (userAnswer === correctAnswer) {
                 document.getElementById("result").textContent = "Correct!";
                 document.getElementById("result").style.color = "green";
             } else {
-                document.getElementById("result").textContent = `Incorrect. The correct answer is ${correctAnswer}`;
+                document.getElementById("result").textContent = "Incorrect.";
                 document.getElementById("result").style.color = "red";
             }
+        }
+        
+        function showAnswer() {
+            document.getElementById("correctAnswer").style.display = "block";
         }
         
         generateProblem();
